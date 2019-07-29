@@ -196,7 +196,6 @@ class get_figure2draw():
 
         img = cv2.resize(img, (self.im_size, self.im_size))
 
-        # 暂时先不管 
         self.time = self.gt.get_time()
         cv2.putText(img, "{} Time: {:.2f}s".format(self.sort_title, self.time)
                     ,(20, 20), cv2.FONT_HERSHEY_PLAIN, 1, self.YELLOW, 1)
