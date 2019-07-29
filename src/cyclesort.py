@@ -34,9 +34,8 @@ def CycleSort(ds):
     for rep in repeatIdxs:
         if dt[rep[0]] == dt[rep[1]]:
             ds.set_val(rep[0], dt[max(rep[0] - 1, 0)])
+
             
-
-
 if __name__ == "__main__":
     # data = get_data(64)
     data = [51, 8, 46, 18, 40, 20, 14, 33, 5, 10, 62, 48, 53
