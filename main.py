@@ -1,16 +1,12 @@
-from src.data import DataSeq
-from src.bubblesort import BubbleSort
-from src.bucketsort import BucketSort
-from src.combsort import CombSort
-from src.cyclesort import CycleSort
-from src.heapsort import HeapSort
-from src.insertionsort import InsertionSort
-from src.mergesort import MergeSort
-from src.monkeysort import MonkeySort
-from src.quicksort import QuickSort
-from src.radixsort import RadixSort
-from src.selectionsort import SelectionSort
-from src.shellsort import ShellSort
+from src.my_data import get_data
+from src.my_data import get_figure2draw
+from src.Scc_Bubblesort import Bubblesort
+from src.Scc_BucketSort import BucketSort
+from src.Scc_Combsort import CombSort
+from src.Scc_Cyclesort import CycleSort
+from src.Scc_HeapSort import HeapSort
+from src.Scc_insertionsort import InsertionSort
+from src.Scc_Quicksort import QuickSort
 
 import argparse
 
@@ -18,47 +14,32 @@ def parse_args():
     parser=argparse.ArgumentParser(description="Sort Visulization")
     parser.add_argument('-l','--length',type=int,default=64)
     parser.add_argument('-i','--interval',type=int,default=1)
-    parser.add_argument('-t','--sort-type',type=str,default='BubbleSort', 
-                                        choices=["BubbleSort","BucketSort","CombSort",
+    parser.add_argument('-t','--sort-type',type=str,default='Bubblesort', 
+                                        choices=["Bubblesort","BucketSort","CombSort",
                                                 "CycleSort","HeapSort","InsertionSort",
-                                                "MergeSort","MonkeySort","QuickSort",
-                                                "RadixSort","SelectionSort","ShellSort",])
-    parser.add_argument('-r','--resample', action='store_true')
-    parser.add_argument('-s','--sparse', action='store_true')
-    parser.add_argument('--no-record', action='store_true')
-    parser.add_argument('--silent', action='store_true')
-    parser.add_argument('--sound-interval', type=int, default=16)
-    args=parser.parse_args()
-
+                                                "QuickSort"])
+    args = parser.parse_args()
     return args
 
 
 if __name__ == "__main__":
     args = parse_args()
-    MAXLENGTH=1000
+    MAXLENGTH = 1000
     Length     = args.length if args.length<MAXLENGTH else MAXLENGTH
     Interval   = args.interval
     SortType   = args.sort_type
-    Resampling = args.resample
-    Sparse     = args.sparse
-    NoRecord   = args.no_record
-    NoSound    = args.silent
-    sound_interval = args.sound_interval
+
     try:
-        SortMethod=eval(SortType)
-    except:
+        SortMethod=eval(SortType) # 将文本转为函数
+    except: 
         print("Sort Type Not Found! Please Check if %s Exists or Not!"%SortType)
         exit()
-    if not NoSound and sound_interval*10<Interval:
-        print("UserWarning: sound interval too small")
 
-    ds=DataSeq(Length, time_interval=Interval, 
-                        sort_title=SortType, 
-                        is_resampling=Resampling, 
-                        is_sparse=Sparse, 
-                        record=not NoRecord, 
-                        sound=not NoSound, sound_interval=sound_interval)
-    ds.StartTimer()
+    data = get_data(Length)
+    ds = get_figure2draw(data, time_interval=Interval
+                             , sort_title = SortType)
+
+    ds.Visualize() # 画出底图
     SortMethod(ds)
-    ds.StopTimer()
-    ds.Hold()
+    ds.set_time_interval(0)
+    ds.Visualize() # 画出排序结束后的图
